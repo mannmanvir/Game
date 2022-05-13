@@ -1,0 +1,3 @@
+line0*Poseidon: 'Where, where am I? There's a trident...and a door I should check them out.'
+line1*Poseidon: 'Hmmm, this is a door that appears to be locked.'
+line2*Poseidon: 'This golden trident is carved with runes and deeply wedged in the tree, I can't pull it out.'
