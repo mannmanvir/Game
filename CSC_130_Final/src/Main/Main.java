@@ -6,7 +6,7 @@
 
 package Main;
 
-import java.awt.Color;
+import java.awt.Color; 
 import java.util.ArrayList;
 
 import java.util.HashMap;
@@ -23,12 +23,12 @@ import Data.spriteInfo;
 public class Main{
 	
 	// Fields (Static) below...
-	public static Vector2D currentVec = new Vector2D(600, 430); 	/* Holds current position of player */
-	public static Vector2D vec1 = new Vector2D(0, 0); 			/* Holds previous position of player */
-	public static int frameCounter = 0; 			/* To hold reference to current png */
+	public static Vector2D currentVec = new Vector2D(600, 430); 	
+	public static Vector2D vec1 = new Vector2D(0, 0); 			
 	
-	public static spriteInfo playerSprite = new spriteInfo(currentVec, "Stick"+frameCounter);
-	public static spriteInfo newSpriteLoc = new spriteInfo (vec1, playerSprite.getTag()); 
+	public static int frameCounter = 0; 	
+	public static spriteInfo currentSprite = new spriteInfo(currentVec, "Stick"+frameCounter);
+	public static spriteInfo newSpriteLoc = new spriteInfo (vec1, currentSprite.getTag()); 
 	
 	public static EZFileRead ezr = new EZFileRead("poseidon.txt");
 	public static String raw;
@@ -38,14 +38,25 @@ public class Main{
 	public static ArrayList<BoundingBox> boundingBoxes = new ArrayList<BoundingBox>(); 	
 	public static ArrayList<spriteInfo> sprites = new ArrayList<spriteInfo>(); 	
 	
-	public static String trigger = ""; 				/* For toggling dialog */
-	public static BoundingBox playerBox;
+	public static String trigger = ""; 			
+	
+	public static BoundingBox boxSprite;
 	public static BoundingBox Rules = new BoundingBox(450, 600, 200, 250);
 	public static BoundingBox Door = new BoundingBox(600, 800, 700, 900); 
 	public static BoundingBox Trident = new BoundingBox(960, 1020, 200, 250); 
 	
 	public static boolean checkCollision(BoundingBox box1, BoundingBox box2){
-		if (((box1.getX1() > box2.getX2()) || (box1.getX2() < box2.getX1()) || (box1.getY1() > box2.getY2()) || (box1.getY2() < box2.getY1()))) {
+		int w = box1.getX1();
+		int x = box1.getY1();
+		int y = box1.getX2();
+	    int z = box1.getY2();
+		
+	    int i = box2.getX1();
+		int q = box2.getY1();
+		int o = box2.getX2();
+		int p = box2.getY2();
+		
+		if ((y < i) || (w > o) || (z < q) || (x > p)) {
 			return false;
 		}
 		else { 
@@ -53,18 +64,23 @@ public class Main{
 		}
 	}
 
-	public static void bouncePlayer(){
-		if ((playerSprite.getCoords().getX() - newSpriteLoc.getCoords().getX()) != 0){
-			if ((playerSprite.getCoords().getX() - newSpriteLoc.getCoords().getX()) > 0)		// If moved from West to East
-				playerSprite.getCoords().adjustX(-16);								
-			if ((playerSprite.getCoords().getX() - newSpriteLoc.getCoords().getX()) < 0)  	// If moved from East to West
-				playerSprite.getCoords().adjustX(+16);
+	public static void playerRebound(){
+		int x = currentSprite.getCoords().getX();
+		int y = currentSprite.getCoords().getY();
+		int i = newSpriteLoc.getCoords().getX();
+		int q = newSpriteLoc.getCoords().getY();
+		
+		if (y - q != 0){
+			if (y - q > 0)		
+				currentSprite.getCoords().adjustY(-8);
+			if (y - q < 0)		
+				currentSprite.getCoords().adjustY(+8);
 		}
-		if ((playerSprite.getCoords().getY() - newSpriteLoc.getCoords().getY()) != 0){
-			if ((playerSprite.getCoords().getY() - newSpriteLoc.getCoords().getY()) > 0)		// If moved from North to South
-				playerSprite.getCoords().adjustY(-16);
-			if ((playerSprite.getCoords().getY() - newSpriteLoc.getCoords().getY()) < 0)		// If moved from South to North
-				playerSprite.getCoords().adjustY(+16);
+		else if (x - i != 0){
+			if (x -i > 0)		
+				currentSprite.getCoords().adjustX(-8);								
+			if (x - i < 0)  	
+				currentSprite.getCoords().adjustX(+8);
 		}
 	}
 
@@ -76,12 +92,12 @@ public class Main{
 	}
 	
 	public static void start() {
-		sprites.add(playerSprite); //adding actual player sprite in 
+		sprites.add(currentSprite); //adding actual player sprite in 
 		
 		boundingBoxes.add(new BoundingBox(-128, 1280, 0, 100));  	    //Boundary box for top of screen so character can't walk through walls. Purposely did not make it realistic in the terms of the character should technically kind of clip through the walls, in order to be reminiscent of "old school" flash games. 
 		boundingBoxes.add(new BoundingBox(-128, 50, -128, 800));	    //Boundary box for left of screen so character can't walk through walls. Purposely did not make it realistic in the terms of the character should technically kind of clip through the walls, in order to be reminiscent of "old school" flash games.
 		boundingBoxes.add(new BoundingBox(-128, 1280, 760, 800));	    //Boundary box for bottom of screen so character can't walk through walls. Purposely did not make it realistic in the terms of the character should technically kind of clip through the walls, in order to be reminiscent of "old school" flash games.
-		boundingBoxes.add(new BoundingBox(1120, 1200, -128, 800));	    //Boundary box for right of screen so character can't walk through walls. Purposely did not make it realistic in the terms of the character should technically kind of clip through the walls, in order to be reminiscent of "old school" flash games.
+		boundingBoxes.add(new BoundingBox(1115, 1200, -128, 800));	    //Boundary box for right of screen so character can't walk through walls. Purposely did not make it realistic in the terms of the character should technically kind of clip through the walls, in order to be reminiscent of "old school" flash games.
 		boundingBoxes.add(new BoundingBox(990, 1200, 50, 200));         //Boundary box for wedged trident so character can't walk through the tree, but it still looks like the trident is "within grasp" so the character can attempt to pull it out.  	
 		
 		if(!EZFileRead.doesFileExist("poseidon.txt")) {
@@ -108,16 +124,18 @@ public class Main{
 	public static void update(Control ctrl) { 
 		// TODO: This is where you can code! (Starting code below is just to show you how it works)
 		ctrl.addSpriteToFrontBuffer(0, 0, "GameBackground"); //Rendering in the game background display first that was made in paint.net before adding the player sprite's hitbox after
-		playerBox = new BoundingBox(playerSprite, 30, 100);
-		playerBox.setX1(playerBox.getX1() + 15);
+		boxSprite = new BoundingBox(currentSprite, 30, 100);
+		boxSprite.setX1(boxSprite.getX1() + 15);
 		
+		BoundingBox w = boxSprite;
+				
 		for (int i = 0; i < boundingBoxes.size(); i++)
-			if (checkCollision(playerBox, boundingBoxes.get(i)))
-				bouncePlayer(); 
+			if (checkCollision(w, boundingBoxes.get(i)))
+				playerRebound(); 
 		
 		for (int i = 0; i < sprites.size(); i++)
 			ctrl.addSpriteToFrontBuffer(sprites.get(i).getCoords().getX(), sprites.get(i).getCoords().getY(), 
 					sprites.get(i).getTag());
-			ctrl.drawString(80, 265, trigger, Color.WHITE);
+			ctrl.drawString(80, 265, trigger, Color.YELLOW);
 	}
 }

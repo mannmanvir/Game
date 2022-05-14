@@ -16,14 +16,6 @@ public class BoundingBox {
 		this.y2 = y2;		
 	}
 	
-	/* @Overload constructor if using sprite. Automatically sets the box size to 128x128 relative to sprite position (top left). */
-	/*public BoundingBox(spriteInfo sprite){	
-		spriteData = sprite;
-		x1 = spriteData.getCoords().getX();
-		x2 = spriteData.getCoords().getX()+128;
-		y1 = spriteData.getCoords().getY();
-		y2 = spriteData.getCoords().getY()+128;
-	}*/
 	public BoundingBox(spriteInfo playerSprite, int latitude, int longitude) {
 		this.playerSprite = playerSprite;
 		this.latitude = latitude;
@@ -33,15 +25,6 @@ public class BoundingBox {
 		this.x2 = playerSprite.getCoords().getX() + latitude;
 		this.y2 = playerSprite.getCoords().getY() + longitude;
 	}
-	
-	/* @Overload sprite constructor with adjustments for each boundary relative to the origin (top left) */
-	/*public BoundingBox(spriteInfo sprite, int adjustX1, int adjustX2, int adjustY1, int adjustY2){	
-		playerSprite = sprite;
-		x1 = playerSprite.getCoords().getX() + adjustX1;
-		x2 = playerSprite.getCoords().getX() + adjustX2;
-		y1 = playerSprite.getCoords().getY() + adjustY1;
-		y2 = playerSprite.getCoords().getY() + adjustY2;
-	}*/
 	
 	public String toString(){
 		return "" + x1 + " " + x2 + " " + y1 + " " + y2;

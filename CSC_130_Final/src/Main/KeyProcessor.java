@@ -2,7 +2,7 @@
 
 package Main;
 
-import logic.Control;
+import logic.Control; 
 import timer.stopWatchX;
 
 import java.util.StringTokenizer;
@@ -13,10 +13,11 @@ import java.util.HashMap;
 
 public class KeyProcessor{
 	// Static Fields
-	private static char last = ' ';							// For debouncing purposes
-	private static stopWatchX sw = new stopWatchX(250); 	// Debouncing Timer
-	private static stopWatchX timer = new stopWatchX(15); 	// Timer for movement
-	private static int i, j; 								// For incrementing sprite tag numbers
+	private static char last = ' ';				// For debouncing purposes
+	private static stopWatchX sw = new stopWatchX(250); 	
+	private static stopWatchX timer = new stopWatchX(40); 	
+	private static int i;
+	private static int q; 							
 	
 	public static EZFileRead ezr = new EZFileRead("poseidon.txt");
 	public static String raw;
@@ -26,87 +27,86 @@ public class KeyProcessor{
 	// Static Method(s)
 	public static void processKey(char key){
 		switch(key){
-		case '%':								// ESC key
-			if(key == ' ')				return;
-			// Debounce routine below...
-			if(key == last)
-				if(sw.isTimeUp() == false)			return;
-			last = key;
-			sw.resetWatch();
-			
+		
+		case '%':								// ESC key							
 			System.exit(0);
 			break;
 		
 		case 'w':
 			Main.trigger = "";
 			if (timer.isTimeUp()){
-				Main.newSpriteLoc.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
-				Main.playerSprite.getCoords().adjustY(-16);
-				Main.playerSprite.setTag("UpStick"+j); 
-				j++;
-				if (j >= 4){
-					j = 0;
+				int x = Main.currentSprite.getCoords().getX();
+				int y = Main.currentSprite.getCoords().getY();
+				Main.newSpriteLoc.setCoords(x, y);
+				Main.currentSprite.getCoords().adjustY(-8);
+				Main.currentSprite.setTag("UpStick"+q); 
+				q++;
+				if (q>=4){
+					q=0;
 				}
 				timer.resetWatch();
 			}
 			
 			break;
 		
-		/* Move West */	
 		case 'a':
-			Main.trigger = ""; 										// Toggles off dialogue text
-			if (timer.isTimeUp()){									
-				Main.newSpriteLoc.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
-				Main.playerSprite.getCoords().adjustX(-16);
-				Main.playerSprite.setTag("ReversedStick"+i);
+			Main.trigger = "";
+			if (timer.isTimeUp()){
+				int x = Main.currentSprite.getCoords().getX();
+				int y = Main.currentSprite.getCoords().getY();
+				Main.newSpriteLoc.setCoords(x, y);
+				Main.currentSprite.getCoords().adjustX(-8);
+				Main.currentSprite.setTag("ReversedStick"+i);
 				i++;
-				if (i >= 4){
-					i = 0;
+				if (i>=4){
+					i=0;
 				}
 				timer.resetWatch();
 			}
 			break;
 			
-		/* Move South */
 		case 's':
 			Main.trigger = "";
 			if (timer.isTimeUp()){
-				Main.newSpriteLoc.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
-				Main.playerSprite.getCoords().adjustY(16);
-				Main.playerSprite.setTag("DownStick"+j);
-				j++;
-				if (j >= 4){
-					j = 0;
+				int x = Main.currentSprite.getCoords().getX();
+				int y = Main.currentSprite.getCoords().getY();
+				Main.newSpriteLoc.setCoords(x, y);
+				Main.currentSprite.getCoords().adjustY(8);
+				Main.currentSprite.setTag("DownStick"+q);
+				q++;
+				if (q>=4){
+					q=0;
 				}
 				timer.resetWatch();
 			}
 			break;
 		
-		/* Move East */	
 		case 'd':
 			Main.trigger = "";
 			if (timer.isTimeUp()){
-				Main.newSpriteLoc.setCoords(Main.playerSprite.getCoords().getX(), Main.playerSprite.getCoords().getY());
-				Main.playerSprite.getCoords().adjustX(16);
-				Main.playerSprite.setTag("Stick"+i);
+				int x = Main.currentSprite.getCoords().getX();
+				int y = Main.currentSprite.getCoords().getY();
+				Main.newSpriteLoc.setCoords(x, y);
+				Main.currentSprite.getCoords().adjustX(8);
+				Main.currentSprite.setTag("Stick"+i);
 				i++;
-				if (i >= 4){
-					i = 0;
+				if (i>=4){
+					i=0;
 				}
 				timer.resetWatch();
 			}
 			break;
-			/* Spacebar */	
+
 		case '$':
 			
 			if(key == ' ')				return;
 			// Debounce routine below...
 			if(key == last)
-				if(sw.isTimeUp() == false)			return;
+				if(sw.isTimeUp()==false)			return;
 			last = key;
 			sw.resetWatch();
 
-			if(Main.checkCollision(Main.playerBox, Main.Rules)){
+			if(Main.checkCollision(Main.boxSprite, Main.Rules)){
 				EZFileWrite ezw = new EZFileWrite("poseidon.txt");
 				if(!EZFileRead.doesFileExist("poseidon.txt")) {
 					System.out.println("File not found!");
@@ -119,11 +119,11 @@ public class KeyProcessor{
 				Main.trigger = ezr.getLine(0);
 			} 
 			
-			if(Main.checkCollision(Main.playerBox, Main.Door)){
+			if(Main.checkCollision(Main.boxSprite, Main.Door)){
 				Main.trigger = ezr.getLine(1);
 			} 
 			
-			if(Main.checkCollision(Main.playerBox, Main.Trident)){
+			if(Main.checkCollision(Main.boxSprite, Main.Trident)){
 				Main.trigger = ezr.getLine(2);
 			}
 			
@@ -134,11 +134,11 @@ public class KeyProcessor{
 			if(key == ' ')				return;
 			// Debounce routine below...
 			if(key == last)
-				if(sw.isTimeUp() == false)			return;
+				if(sw.isTimeUp()==false)			return;
 			last = key;
 			sw.resetWatch();
 			
-			Control.isMouseCoordsDisplayed = !Control.isMouseCoordsDisplayed;
+			Control.isMouseCoordsDisplayed=!Control.isMouseCoordsDisplayed;
 			break;
 		
 		}
