@@ -4,4 +4,6 @@ This is a semester long Java-based game in which we were provided a custom game 
 
 To play, simply press on the green "Code" button that is present on this repositories home page, and download the ZIP file. Once downloaded, extract the files and load up Eclipse (or any chosen IDE). Import the project and make sure to select the 'CSC_130_Final' folder. The code can be ran from "main.java" which should load the game environemnt in a new full screen window. 
 
+Once the game loads, you can use the "W A S D" keys to move, and space bar to interact with objects. When finished, press the "Escape" key to close the window.
+
 ![130-game](https://github.com/mannmanvir/Game/assets/72842990/f4cdd6e9-f3c7-496e-9241-0c0b063678e0)
